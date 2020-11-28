@@ -2,7 +2,7 @@
 #define MYQSS_H
 #include<QString>
 
-/*此文件统一存放一些QSS样式代码*/
+/*QSS样式代码*/
 
 //播放按钮样式
 inline QString PlayStyle()
