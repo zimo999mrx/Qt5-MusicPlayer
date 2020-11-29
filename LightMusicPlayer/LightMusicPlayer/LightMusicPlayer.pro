@@ -31,7 +31,6 @@ SOURCES += \
     MainWidget.cpp \
     MusicListWidget.cpp \
     MusicList.cpp \
-    MusicListDialog.cpp \
     LyricWidget.cpp
 
 HEADERS += \
@@ -40,11 +39,9 @@ HEADERS += \
     MainWidget.h \
     MusicListWidget.h \
     MusicList.h \
-    MusicListDialog.h \
     LyricWidget.h
 
 FORMS += \
-    MusicListDialog.ui \
     mainWidget.ui \
     LyricWidget.ui
 

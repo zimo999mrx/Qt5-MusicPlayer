@@ -10,7 +10,6 @@
 #include <QtSql>
 #include <QMessageBox>
 #include <QInputDialog>
-#include "MusicListDialog.h"
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
@@ -507,7 +506,7 @@ void MainWidget::updateDuration(qint64 duration)
     ui->positionSlider->setEnabled(static_cast<int>(duration) > 0);
     if(!(static_cast<int>(duration) > 0)) {
         //无音乐播放时，界面元素
-        ui->infoLabel->setText("KEEP CALM AND CARRY ON ...");
+        ui->infoLabel->setText("无音乐");
         mySystemTray->setToolTip(u8"LightMusicPlayer");
         QImage image(":/image/image/image/non-music.png");
         ui->coverLabel->setPixmap(QPixmap::fromImage(image));
@@ -541,26 +540,21 @@ void MainWidget::updateInfo()
         info.append(" ["+formatTime(player->duration())+"]");
         ui->infoLabel->setText(info);
         mySystemTray->setToolTip("正在播放："+info);
-        //封面图片（应获取"ThumbnailImage" From: https://www.zhihu.com/question/36859497）
+        //封面图片（此次获取"ThumbnailImage" 参考: https://www.zhihu.com/question/36859497）
         QImage picImage= player->metaData(QStringLiteral("ThumbnailImage")).value<QImage>();
         if(picImage.isNull()) picImage=QImage(":/image/image/image/non-music.png");
         ui->coverLabel->setPixmap(QPixmap::fromImage(picImage));
         ui->coverLabel->setScaledContents(true);
         //改变正在播放歌曲的图标
+        //for循环把全部图标改成默认图标
         for(int i=0;i<playlist->mediaCount();i++){
             QListWidgetItem *p=ui->playListWidget->item(i);
             p->setIcon(ui->playListWidget->getIcon());
         }
+        //找到正在播放的音乐的item，把item的图标改成正在播放的图标
         int index=playlist->currentIndex();
         QListWidgetItem *p=ui->playListWidget->item(index);
         p->setIcon(QIcon(":/image/image/image/music-playing.png"));
-        
-        //歌词界面显示的信息
-        ui->musicTitleLabel->setText(title);
-        ui->musicAlbumLabel->setText(u8"专辑："+albumTitle);
-        ui->musicAuthorLabel->setText(u8"歌手："+author);
-        //解析歌词
-        ui->lyricWidget->process(ui->playListWidget->musicList.music[index].getLyricFile());
     }
 }
 
@@ -851,23 +845,6 @@ void MainWidget::on_btnSkin_clicked()
     menu_changeSkin->exec(QCursor::pos());
 }
 
-void MainWidget::on_btnAddtoMusicList_clicked()
-{
-    MusicListDialog *dialog=new MusicListDialog(this);
-    int num=ui->localMusicWidget->count();
-    bool *results=new bool[num];
-    dialog->setMusicList(ui->localMusicWidget->musicList,results);
-    if(dialog->exec()==QDialog::Accepted){
-        for(int i=0;i<num;i++){
-            if(results[i]){
-                musiclist[musiclist_index].addMusic(ui->localMusicWidget->musicList.getMusic(i));
-            }
-        }
-        musicListWidget_refresh();
-    }
-    delete []results;
-}
-
 void MainWidget::on_musicListWidget_doubleClicked(const QModelIndex &index)
 {
     playlist->clear();
@@ -886,23 +863,6 @@ void MainWidget::on_musicListWidget_customContextMenuRequested(const QPoint &pos
         return;
     }
     menu_musiclist->exec(QCursor::pos());
-}
-
-void MainWidget::on_btnAddtoFavor_clicked()
-{
-    MusicListDialog *dialog=new MusicListDialog(this);
-    int num=ui->localMusicWidget->count();
-    bool *results=new bool[num];
-    dialog->setMusicList(ui->localMusicWidget->musicList,results);
-    if(dialog->exec()==QDialog::Accepted){
-        for(int i=0;i<num;i++){
-            if(results[i]){
-                ui->favorMusicWidget->musicList.addMusic(ui->localMusicWidget->musicList.getMusic(i));
-            }
-        }
-        ui->favorMusicWidget->refresh();
-    }
-    delete []results;
 }
 
 void MainWidget::on_btnSortSinger_clicked()
