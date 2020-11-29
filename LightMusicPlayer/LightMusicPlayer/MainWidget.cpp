@@ -189,7 +189,7 @@ void MainWidget::init_sqlite()
     {
         database = QSqlDatabase::addDatabase("QSQLITE");
         database.setDatabaseName("Music.db");
-        database.setUserName("NJUTang");
+        database.setUserName("xzj");
         database.setPassword("123456");
         if (!database.open())
         {
@@ -235,28 +235,32 @@ void MainWidget::init_musicList()
     //从数据库中恢复歌单
     QSqlQuery sql_query;
     QString select_sql = "select name from MusicLists";
-    sql_query.prepare(select_sql);
-    if(sql_query.exec())
+    sql_query.prepare(select_sql);//预处理
+    if(sql_query.exec())//如果sql语句执行顺利
     {
+/* QSqlQuery提供了一个访问一条查询结果记录的方法。在调用了exec()方法之后，QSqlQuery的内部指针定位到了第一条记录之前的位置。
+ * 我们必须调用一次QSqlQuery::next()内部指针就移动到第一条记录上，然后重复调用next()方法就可以移动到其他记录上，直到该函数返回false为止。
+ */
         while(sql_query.next())
         {    
             QString musicListName=sql_query.value(0).toString();
             MusicList tempList;
             tempList.setName(musicListName);
             tempList.read_fromSQL();
-            musiclist.push_back(tempList);
+            musiclist.push_back(tempList);//将歌单数据放进musiclist容器中
         }  
     }
     namelist_refresh();
 }
 
+//更新展示歌单名字的listwidget
 void MainWidget::namelist_refresh()
 {
     //先清空
     QSqlQuery sql_query;
     QString delete_sql = "delete from MusicLists";
     sql_query.prepare(delete_sql);
-    sql_query.exec();
+    sql_query.exec();//执行删除语句，在逐个执行插入语句
     for(size_t i=0;i<musiclist.size();i++){
         QSqlQuery sql_query2;
         QString insert_sql = "insert into MusicLists values (?)";
@@ -274,6 +278,7 @@ void MainWidget::namelist_refresh()
     }
 }
 
+//加载配置文件。如果设置了自定义背景图片，会在此配置文件中记录下图片文件的路径。
 void MainWidget::init_settings()
 {
     QSettings mysettings("./LightMusicPlayer.ini",QSettings::IniFormat);
@@ -296,6 +301,7 @@ void MainWidget::init_settings()
     }
 }
 
+//用于更新选中展示歌单内容的listwidget
 void MainWidget::musicListWidget_refresh()
 {
     if(musiclist_index != -1){
@@ -313,6 +319,7 @@ void MainWidget::on_playListWidget_customContextMenuRequested(const QPoint &pos)
     menu_playlist->exec(QCursor::pos());
 }
 
+//?
 void MainWidget::playlist_removeMusic()
 {
     int pos=ui->playListWidget->currentRow();
@@ -476,7 +483,7 @@ void MainWidget::on_nameListWidget_customContextMenuRequested(const QPoint &pos)
     menu_namelist->exec(QCursor::pos());
 }
 
-
+//把时间格式变成,多少分多少秒
 QString formatTime(qint64 timeMilliSeconds)
 {
     qint64 seconds = timeMilliSeconds / 1000;
@@ -501,7 +508,7 @@ void MainWidget::updateDuration(qint64 duration)
     if(!(static_cast<int>(duration) > 0)) {
         //无音乐播放时，界面元素
         ui->infoLabel->setText("KEEP CALM AND CARRY ON ...");
-        mySystemTray->setToolTip(u8"LightMusicPlayer · By NJU-TJL");
+        mySystemTray->setToolTip(u8"LightMusicPlayer");
         QImage image(":/image/image/image/non-music.png");
         ui->coverLabel->setPixmap(QPixmap::fromImage(image));
         ui->musicTitleLabel->setText("");
@@ -597,7 +604,7 @@ void MainWidget::init_systemTrayIcon()
 {
     mySystemTray=new QSystemTrayIcon(this);
     mySystemTray->setIcon(QIcon(":/image/image/image/systemTrayIcon.png"));
-    mySystemTray->setToolTip(u8"LightMusicPlayer · By NJU-TJL");
+    mySystemTray->setToolTip(u8"LightMusicPlayer");
     connect(mySystemTray,&QSystemTrayIcon::activated,this,&MainWidget::systemTrayIcon_activated);
     //添加菜单项
     QAction *action_systemTray_pre = new QAction(QIcon(":/image/image/image/pre2.png"), u8"上一首");
@@ -962,11 +969,6 @@ void MainWidget::on_btnNeaten_3_clicked()
     musicListWidget_refresh();
 }
 
-void MainWidget::on_btnTitle_clicked()
-{
-    on_btnAbout_clicked();
-}
-
 void MainWidget::on_btnLyric_clicked()
 {
     ui->stackedWidget->setCurrentIndex(4);
@@ -974,54 +976,26 @@ void MainWidget::on_btnLyric_clicked()
 
 void MainWidget::on_btnClear_clicked()
 {
-    QMessageBox::StandardButton btn;
-    btn = QMessageBox::question(this, "提示", "此操作不可逆！\n确实要清空吗?", QMessageBox::Yes|QMessageBox::No);
-    if (btn == QMessageBox::Yes) {
-        ui->playListWidget->musicList.clear();
-        ui->playListWidget->refresh();
-        playlist->clear();
-    }
+    ui->playListWidget->musicList.clear();
+    ui->playListWidget->refresh();
+    playlist->clear();
 }
 
 void MainWidget::on_btnClear_2_clicked()
 {
-    QMessageBox::StandardButton btn;
-    btn = QMessageBox::question(this, "提示", "此操作不可逆！\n确实要清空吗?", QMessageBox::Yes|QMessageBox::No);
-    if (btn == QMessageBox::Yes) {
-        ui->localMusicWidget->musicList.clear();
-        ui->localMusicWidget->refresh();
-    }
+    ui->localMusicWidget->musicList.clear();
+    ui->localMusicWidget->refresh();
 }
 
 void MainWidget::on_btnClear_3_clicked()
 {
-    QMessageBox::StandardButton btn;
-    btn = QMessageBox::question(this, "提示", "此操作不可逆！\n确实要清空吗?", QMessageBox::Yes|QMessageBox::No);
-    if (btn == QMessageBox::Yes) {
-        ui->favorMusicWidget->musicList.clear();
-        ui->favorMusicWidget->refresh();
-    }
+    ui->favorMusicWidget->musicList.clear();
+    ui->favorMusicWidget->refresh();
 }
 
 void MainWidget::on_btnClear_4_clicked()
 {
-    QMessageBox::StandardButton btn;
-    btn = QMessageBox::question(this, "提示", "此操作不可逆！\n确实要清空吗?", QMessageBox::Yes|QMessageBox::No);
-    if (btn == QMessageBox::Yes) {
-        musiclist[musiclist_index].clear();
-        musicListWidget_refresh();
-    }
+    musiclist[musiclist_index].clear();
+    musicListWidget_refresh();
 }
 
-void MainWidget::on_btnAbout_clicked()
-{
-    QMessageBox::about(this,u8"关于","LightMusicPlayer | 一款精致小巧的本地音乐播放器\n"
-                                   "作者：NJU-TJL\n\n"
-                                   "【歌词文件说明】需要与对应的歌曲MP3在同目录且同名（.lry文件）\n"
-                                   "【快捷键说明】\n"
-                                   "播放/暂停  -  空格\n"
-                                   "上一曲/下一曲  -  Alt键+方向键←/→\n"
-                                   "【添加本地音乐】可直接拖拽至软件界面内或者点击本地音乐界面的添加按钮（Ctrl键+O）\n"
-                                   "【音乐文件类型】添加过程中会自动过滤得到可播放的文件类型（.mp3/.flac/.mpga文件），所以添加时无需考虑文件类型，使用\"Ctrl+A\"选择文件夹内全部文件添加即可\n"
-                                   "\n注：鼠标移动到不认识的按钮上，会有说明哦~\n");
-}

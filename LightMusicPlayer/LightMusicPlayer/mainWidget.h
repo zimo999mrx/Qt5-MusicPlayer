@@ -144,13 +144,11 @@ private slots:
     void on_btnNeaten_clicked();//整理歌单按钮
     void on_btnNeaten_2_clicked();
     void on_btnNeaten_3_clicked();
-    void on_btnTitle_clicked();
     void on_btnLyric_clicked();
     void on_btnClear_clicked();//清空
     void on_btnClear_2_clicked();
     void on_btnClear_3_clicked();
     void on_btnClear_4_clicked();
-    void on_btnAbout_clicked();
     void on_btnSortSinger_clicked();//歌单排序
     void on_btnSortTitle_clicked();
     void on_btnSortDuration_clicked();

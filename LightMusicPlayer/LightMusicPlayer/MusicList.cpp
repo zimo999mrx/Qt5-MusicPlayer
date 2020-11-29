@@ -107,7 +107,7 @@ void MusicList::showInExplorer(int pos)
 {
     QString str=music[pos].getUrl().toString();
     str.remove(str.split("/").last());//切割字符串获得所在的文件夹路径
-    QDesktopServices::openUrl(str);
+    QDesktopServices::openUrl(str);//调用QDesktopServices类函数打开文件夹
 }
 
 void MusicList::detail(int pos)
@@ -118,7 +118,7 @@ void MusicList::detail(int pos)
 void MusicList::remove_SQL_all()
 {
     QSqlQuery sql_query;
-    QString delete_sql = "delete from MusicInfo where name = ?";
+    QString delete_sql = "delete from MusicInfo where name = ?";//用SQL查询语句，在数据库中删除对应
     sql_query.prepare(delete_sql);
     sql_query.addBindValue(name);
     sql_query.exec();

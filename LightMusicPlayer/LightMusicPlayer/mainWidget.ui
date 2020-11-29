@@ -528,7 +528,7 @@ color:rgba(0,0,0,100);
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="imagefile.qrc">:/image/image/image/non-music.png</pixmap>
+    <pixmap resource="imagefile.qrc">:/image/image/image/music.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -2170,48 +2170,11 @@ background-position:center center;
     <rect>
      <x>10</x>
      <y>0</y>
-     <width>338</width>
+     <width>181</width>
      <height>53</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_6">
-    <item>
-     <widget class="QPushButton" name="btnTitle">
-      <property name="font">
-       <font>
-        <family>Microsoft YaHei UI</family>
-        <pointsize>10</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="toolTip">
-       <string>关于</string>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="imagefile.qrc">
-        <normaloff>:/image/image/image/Title.png</normaloff>:/image/image/image/Title.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>40</width>
-        <height>40</height>
-       </size>
-      </property>
-      <property name="flat">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
     <item>
      <widget class="QLabel" name="titleLabel">
       <property name="enabled">
@@ -2231,7 +2194,7 @@ background-position:center center;
 </string>
       </property>
       <property name="text">
-       <string>LightMusicPlayer | By NJU-TJL</string>
+       <string>qt音乐播放器</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -2270,47 +2233,6 @@ background-position:center center;
    <property name="icon">
     <iconset resource="imagefile.qrc">
      <normaloff>:/image/image/image/lyric.png</normaloff>:/image/image/image/lyric.png</iconset>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>30</width>
-     <height>30</height>
-    </size>
-   </property>
-   <property name="flat">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnAbout">
-   <property name="geometry">
-    <rect>
-     <x>980</x>
-     <y>10</y>
-     <width>35</width>
-     <height>35</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>35</width>
-     <height>35</height>
-    </size>
-   </property>
-   <property name="cursor">
-    <cursorShape>PointingHandCursor</cursorShape>
-   </property>
-   <property name="toolTip">
-    <string>关于</string>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="icon">
-    <iconset resource="imagefile.qrc">
-     <normaloff>:/image/image/image/about.png</normaloff>:/image/image/image/about.png</iconset>
    </property>
    <property name="iconSize">
     <size>
