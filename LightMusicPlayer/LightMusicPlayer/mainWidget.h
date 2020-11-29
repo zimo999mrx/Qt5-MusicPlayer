@@ -137,8 +137,10 @@ private slots:
     void on_nameListWidget_customContextMenuRequested(const QPoint &pos);
     void on_nameListWidget_doubleClicked(const QModelIndex &index);
     void on_btnSkin_clicked();
+    void on_btnAddtoMusicList_clicked();
     void on_musicListWidget_doubleClicked(const QModelIndex &index);
     void on_musicListWidget_customContextMenuRequested(const QPoint &pos);
+    void on_btnAddtoFavor_clicked();
     void on_btnNeaten_clicked();//整理歌单按钮
     void on_btnNeaten_2_clicked();
     void on_btnNeaten_3_clicked();
