@@ -43,17 +43,6 @@ private:
     void updateInfo();
     void updatePlayBtn();
     
-    //系统托盘
-    QSystemTrayIcon *mySystemTray;
-    QAction *action_systemTray_play;
-    QAction *action_systemTray_playmode;
-    //响应系统托盘的动作（双击等）
-    void systemTrayIcon_activated(QSystemTrayIcon::ActivationReason reason);
-    //退出应用
-    void quitMusicPlayer();
-    //系统托盘初始化
-    void init_systemTrayIcon();
-    
     //数据库初始化
     void init_sqlite();
     //配置初始化（配置文件读取）
@@ -94,8 +83,6 @@ protected:
     void mousePressEvent(QMouseEvent *event) override; 
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
-    //关闭时不退出，而是到系统托盘
-    void closeEvent(QCloseEvent *event) override;
     //拖拽文件进入
     void dragEnterEvent(QDragEnterEvent* event) override;
     void dropEvent(QDropEvent* event) override;

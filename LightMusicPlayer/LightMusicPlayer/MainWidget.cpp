@@ -34,9 +34,6 @@ MainWidget::MainWidget(QWidget *parent) :
     
     //配置初始化
     init_settings();
-    
-    //系统托盘初始化
-    init_systemTrayIcon();
 }
 
 MainWidget::~MainWidget()
@@ -507,7 +504,6 @@ void MainWidget::updateDuration(qint64 duration)
     if(!(static_cast<int>(duration) > 0)) {
         //无音乐播放时，界面元素
         ui->infoLabel->setText("无音乐");
-        mySystemTray->setToolTip(u8"LightMusicPlayer");
         QImage image(":/image/image/image/non-music.png");
         ui->coverLabel->setPixmap(QPixmap::fromImage(image));
         ui->musicTitleLabel->setText("");
@@ -539,7 +535,6 @@ void MainWidget::updateInfo()
         info.append(" - "+title);
         info.append(" ["+formatTime(player->duration())+"]");
         ui->infoLabel->setText(info);
-        mySystemTray->setToolTip("正在播放："+info);
         //封面图片（此次获取"ThumbnailImage" 参考: https://www.zhihu.com/question/36859497）
         QImage picImage= player->metaData(QStringLiteral("ThumbnailImage")).value<QImage>();
         if(picImage.isNull()) picImage=QImage(":/image/image/image/non-music.png");
@@ -563,63 +558,9 @@ void MainWidget::updatePlayBtn()
     if(player->state()==QMediaPlayer::PlayingState)
     {
         ui->btnPlay->setStyleSheet(PlayStyle());
-        action_systemTray_play->setIcon(QIcon(":/image/image/image/pause2.png"));
-        action_systemTray_play->setText(u8"暂停");
     }else{
         ui->btnPlay->setStyleSheet(PaseStyle());
-        action_systemTray_play->setIcon(QIcon(":/image/image/image/play2.png"));
-        action_systemTray_play->setText(u8"播放");
     }
-}
-
-void MainWidget::systemTrayIcon_activated(QSystemTrayIcon::ActivationReason reason)
-{
-    switch (reason) {
-    case QSystemTrayIcon::DoubleClick:
-        //显/隐主界面
-        if(isHidden()){
-            show();
-        }else{
-            hide();
-        }
-        break;
-    default:
-        break;
-    }
-}
-
-void MainWidget::quitMusicPlayer()
-{
-    //退出应用
-    QCoreApplication::quit();
-}
-
-void MainWidget::init_systemTrayIcon()
-{
-    mySystemTray=new QSystemTrayIcon(this);
-    mySystemTray->setIcon(QIcon(":/image/image/image/systemTrayIcon.png"));
-    mySystemTray->setToolTip(u8"LightMusicPlayer");
-    connect(mySystemTray,&QSystemTrayIcon::activated,this,&MainWidget::systemTrayIcon_activated);
-    //添加菜单项
-    QAction *action_systemTray_pre = new QAction(QIcon(":/image/image/image/pre2.png"), u8"上一首");
-    connect(action_systemTray_pre, &QAction::triggered, this, &MainWidget::on_btnPre_clicked);
-    action_systemTray_play = new QAction(QIcon(":/image/image/image/play2.png"), u8"播放");
-    connect(action_systemTray_play, &QAction::triggered, this, &MainWidget::on_btnPlay_clicked);
-    QAction *action_systemTray_next = new QAction(QIcon(":/image/image/image/next2.png"), u8"下一首");
-    connect(action_systemTray_next, &QAction::triggered, this, &MainWidget::on_btnNext_clicked);
-    action_systemTray_playmode = new QAction(QIcon(":/image/image/image/loop2.png"), u8"循环播放");
-    connect(action_systemTray_playmode, &QAction::triggered, this, &MainWidget::on_btnPlayMode_clicked);
-    QAction *action_systemTray_quit = new QAction(QIcon(":/image/image/image/exit.png"), u8"退出应用");
-    connect(action_systemTray_quit, &QAction::triggered, this, &MainWidget::quitMusicPlayer);
-    
-    QMenu *pContextMenu = new QMenu(this);
-    pContextMenu->addAction(action_systemTray_pre);
-    pContextMenu->addAction(action_systemTray_play);
-    pContextMenu->addAction(action_systemTray_next);
-    pContextMenu->addAction(action_systemTray_playmode);
-    pContextMenu->addAction(action_systemTray_quit);
-    mySystemTray->setContextMenu(pContextMenu);
-    mySystemTray->show();
 }
 
 void MainWidget::mousePressEvent(QMouseEvent *event)
@@ -659,16 +600,6 @@ void MainWidget::mouseReleaseEvent(QMouseEvent *event)
     setCursor(Qt::ArrowCursor);
 }
 
-void MainWidget::closeEvent(QCloseEvent *event)
-{
-    //最小化到托盘
-    if(!mySystemTray->isVisible()){
-        mySystemTray->show();
-    }
-    hide();
-    event->ignore();
-}
-
 void MainWidget::dragEnterEvent(QDragEnterEvent *event)
 {
     event->acceptProposedAction();
@@ -684,7 +615,7 @@ void MainWidget::dropEvent(QDropEvent *event)
 }
 void MainWidget::on_btnQuit_clicked()
 {
-    close();
+    QCoreApplication::quit();
 }
 
 void MainWidget::on_btnPlay_clicked()
@@ -720,22 +651,16 @@ void MainWidget::on_btnPlayMode_clicked()
     if(playlist->playbackMode()==QMediaPlaylist::Loop){
         ui->btnPlayMode->setStyleSheet(RandomStyle());
         ui->btnPlayMode->setToolTip(u8"随机播放");
-        action_systemTray_playmode->setIcon(QIcon(":/image/image/image/random2.png"));
-        action_systemTray_playmode->setText(u8"随机播放");
         playlist->setPlaybackMode(QMediaPlaylist::Random);
     }
     else if(playlist->playbackMode()==QMediaPlaylist::Random){
         ui->btnPlayMode->setStyleSheet(LoopOneStyle());
         ui->btnPlayMode->setToolTip(u8"单曲循环");
-        action_systemTray_playmode->setIcon(QIcon(":/image/image/image/loop-one2.png"));
-        action_systemTray_playmode->setText(u8"单曲循环");
         playlist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
     }
     else if(playlist->playbackMode()==QMediaPlaylist::CurrentItemInLoop){
         ui->btnPlayMode->setStyleSheet(LoopStyle());
         ui->btnPlayMode->setToolTip(u8"循环播放");
-        action_systemTray_playmode->setIcon(QIcon(":/image/image/image/loop2.png"));
-        action_systemTray_playmode->setText(u8"循环播放");
         playlist->setPlaybackMode(QMediaPlaylist::Loop);
     }
 }
