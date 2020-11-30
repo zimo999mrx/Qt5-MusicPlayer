@@ -36,8 +36,6 @@ public:
     void detail();
     //存入数据库
     void insertSQL(const QString& name);
-    //根据文件名来获取歌词路径
-    QString getLyricFile();
     
     friend class MusicList;
 };

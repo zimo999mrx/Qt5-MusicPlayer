@@ -30,20 +30,17 @@ SOURCES += \
     Music.cpp \
     MainWidget.cpp \
     MusicListWidget.cpp \
-    MusicList.cpp \
-    LyricWidget.cpp
+    MusicList.cpp
 
 HEADERS += \
     Music.h \
     myQSS.h \
     MainWidget.h \
     MusicListWidget.h \
-    MusicList.h \
-    LyricWidget.h
+    MusicList.h
 
 FORMS += \
-    mainWidget.ui \
-    LyricWidget.ui
+    mainWidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

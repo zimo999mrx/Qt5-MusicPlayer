@@ -494,7 +494,6 @@ void MainWidget::updatePosition(qint64 position)
 {
     ui->positionSlider->setValue(static_cast<int>(position));
     ui->positionLabel->setText(formatTime(position)+"/"+formatTime(player->duration()));
-    if(playlist->currentIndex()>=0)ui->lyricWidget->show(position);
 }
 
 void MainWidget::updateDuration(qint64 duration)
@@ -506,10 +505,6 @@ void MainWidget::updateDuration(qint64 duration)
         ui->infoLabel->setText("无音乐");
         QImage image(":/image/image/image/non-music.png");
         ui->coverLabel->setPixmap(QPixmap::fromImage(image));
-        ui->musicTitleLabel->setText("");
-        ui->musicAlbumLabel->setText("");
-        ui->musicAuthorLabel->setText("");
-        ui->lyricWidget->clear();
     }
     ui->positionSlider->setPageStep(static_cast<int>(duration) / 10);
 }
@@ -852,11 +847,6 @@ void MainWidget::on_btnNeaten_3_clicked()
 {
     musiclist[musiclist_index].neaten();
     musicListWidget_refresh();
-}
-
-void MainWidget::on_btnLyric_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(4);
 }
 
 void MainWidget::on_btnClear_clicked()
