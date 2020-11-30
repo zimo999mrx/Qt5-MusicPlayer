@@ -570,7 +570,7 @@ void MainWidget::mousePressEvent(QMouseEvent *event)
     if(!(x>=x_widget&&x<=x_widget+w && y>=y_widget&&y<=y_widget+h)){
         ui->volumeSlider->hide();
     }
-    
+
     //记录窗口移动的初始位置
     offset = event->globalPos() - pos();
     event->accept();
@@ -584,6 +584,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *event)
     if((y<ui->titleLabel->geometry().height())&&(x<ui->layoutWidget1->geometry().x())){
         move(event->globalPos() - offset);
         event->accept();    
+        //setCursor 更改鼠标形状
         setCursor(Qt::ClosedHandCursor);
     }
 }

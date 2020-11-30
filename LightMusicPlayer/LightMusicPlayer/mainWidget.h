@@ -78,8 +78,8 @@ protected:
     //窗口拖动时记录的起始点
     QPoint offset;
     /*重写Widget的一些方法*/
-    //实现窗口可拖动
-    void mousePressEvent(QMouseEvent *event) override; 
+    //，实现窗口可拖动
+    void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     //拖拽文件进入

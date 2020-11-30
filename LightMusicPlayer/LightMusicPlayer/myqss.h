@@ -3,6 +3,10 @@
 #include<QString>
 
 /*QSS样式代码*/
+/* QSS代码作用类似于HTML里面的CSS。（stylesheet 样式表）
+ * 使用QSS代码方便 播放/暂停键，播放模式键 的图标的切换。
+ * 参考：https://blog.csdn.net/hht0506/article/details/104580407
+ */
 
 //播放按钮样式
 inline QString PlayStyle()
