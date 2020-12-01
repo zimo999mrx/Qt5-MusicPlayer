@@ -17,12 +17,13 @@ private:
     qint64 duration; 
     //唱片集
     QString albumTitle;
-    //比特率
+    //比特率（音质）
     int audioBitRate;
 
     //根据歌曲url获得歌曲信息
     void refreshInfo();
     
+    //访问MusicCompare类的函数
     friend class MusicCompare;
 public:
     Music(){}
@@ -37,10 +38,11 @@ public:
     //存入数据库
     void insertSQL(const QString& name);
     
+    //访问MusicList类的函数
     friend class MusicList;
 };
 
-//排序的可选属性
+// 排序的可选属性（排序的方法，默认(按 info信息/作者 排序)，按标题排序，按作者排序，按时长排序，相同的歌曲消掉）
 enum COMPARE{DEFAULT,TITLE,AUTHOR,DURATION,EQUALITY};
 
 //用于歌曲排序的函数对象

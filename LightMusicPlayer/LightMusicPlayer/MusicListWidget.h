@@ -4,6 +4,9 @@
 #include<QListWidget>
 #include<MusicList.h>
 
+/* Qt提供QListWidget类列表框控件用来加载并显示多个列表项,
+ * MusicListWidget 用来显示 歌单.
+ */
 class MusicListWidget:public QListWidget
 {
     Q_OBJECT

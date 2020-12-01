@@ -8,6 +8,7 @@
 
 MusicList::MusicList(const QList<QUrl> &urls, QString iname)
 {
+    //构造方法
     addMusic(urls);
     setName(iname);
 }
@@ -124,6 +125,7 @@ void MusicList::remove_SQL_all()
     sql_query.exec();
 }
 
+//便于排序
 void MusicList::insert_SQL_all()
 {
     for(auto i=music.begin();i!=music.end();i++){

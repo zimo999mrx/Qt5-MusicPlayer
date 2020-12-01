@@ -3,7 +3,7 @@
 MusicListWidget::MusicListWidget(QWidget *parent)
     :QListWidget (parent)
 {
-    
+    //构造方法
 }
 
 void MusicListWidget::refresh()
