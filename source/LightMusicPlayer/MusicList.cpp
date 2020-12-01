@@ -13,35 +13,34 @@ MusicList::MusicList(const QList<QUrl> &urls, QString iname)
     setName(iname);
 }
 
+//用文件地址来添加歌曲
 void MusicList::addMusic(const QList<QUrl> &urls)
 {
-    //实测这里耗时较长，所以添加一个进度显示对话框
-    QProgressDialog proDialog(u8"添加进度",u8"取消",0,urls.size());
-    proDialog.setMinimumSize(350,150);
-    proDialog.setWindowModality(Qt::WindowModal);
-    proDialog.setWindowTitle("添加中...请稍后");
-    proDialog.show();
-    int x=0;
+    /* 用 foreach 遍历 QUrl链表数组中的全部元素。
+     */
     foreach (QUrl i, urls) {
-        x++;
-        proDialog.setValue(x);
-        //过滤Url的类型
+        //过滤Url（添加的文件的地址）的类型
         QMimeDatabase db;
+        //用QMimeDatabase.mimeTypeForFile方法来获取文件类型。QMimeType是返回的数据的数据类型.
         QMimeType mime = db.mimeTypeForFile(i.toLocalFile());
         if(mime.name()!="audio/mpeg"&&mime.name()!="audio/flac"){
+            //不是音乐文件的跳过
             continue;
         }
-        //剩下的符合类型
+        //剩下的符合类型,强制类型转换为Music类数据，放进music动态数组里，再把music动态数组里的内容放进数据库内
         music.push_back(Music(i));
         if(sql_flag){
             music[music.size()-1].insertSQL(name);
         }
-        if(proDialog.wasCanceled()) break;
     }
 }
 
+/* addMusic 函数重载
+ * 用于已添加的歌曲从一个歌单里添加到另一个歌单
+ */
 void MusicList::addMusic(const Music &iMusic)
 {
+    //同上30行
     music.push_back(iMusic);
     if(sql_flag){
         music[music.size()-1].insertSQL(name);
@@ -50,9 +49,12 @@ void MusicList::addMusic(const Music &iMusic)
 
 Music MusicList::getMusic(int pos)
 {
+    //传入歌曲的下标，再把位于该下标的歌曲传出
     return music[pos];
 }
 
+//用于 把当前播放的歌曲添加到“当前播放”歌单里
+//auto 自动声明变量类型
 void MusicList::addToPlayList(QMediaPlaylist *playlist)
 {
     for(auto i=music.begin();i!=music.end();i++){
@@ -62,10 +64,14 @@ void MusicList::addToPlayList(QMediaPlaylist *playlist)
 
 void MusicList::addToListWidget(MusicListWidget *listWidget)
 {
+    //遍历歌单里的歌曲
     foreach(const Music &i,music){
         QListWidgetItem *item = new QListWidgetItem;
+        //给每个歌曲加个音乐图标
         item->setIcon(listWidget->getIcon());
+        //添加歌曲的信息(作者 - 歌曲名 - 歌曲时长)
         item->setText(i.getInfo());
+        //把加工完的item 添加到歌单页面
         listWidget->addItem(item);
     }
 }

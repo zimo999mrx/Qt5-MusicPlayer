@@ -21,6 +21,7 @@ void MusicListWidget::setMusicList(const MusicList &music)
 void MusicListWidget::setMusicList_playing(const MusicList &music)
 {
     musicList=music;
+    //当前播放列表的数据不用添加到数据库
     musicList.setSQL(false);
     refresh();
 }

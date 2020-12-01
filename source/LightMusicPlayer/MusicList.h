@@ -13,7 +13,10 @@ class MusicList
 {    
     //歌单名
     QString name;
-    //所存储的歌曲
+    /* 所存储的歌曲,用vector存放:
+     * vector是C++标准模版库STL中的内容。它能够像容器一样存放各种类型的对象，
+     * vector是一个能够存放任意类型的动态数组，能够增加和压缩数据。
+     */
     vector<Music> music;
     
     //控制是否需要与数据库交互（比如：当前播放列表的歌单删除歌曲时不需要更新数据库，只是临时的）
@@ -29,6 +32,7 @@ public:
     //设定数据库标志
     void setSQL(bool on){ sql_flag=on; }
     //从url添加歌曲
+    //QList,QT里面的链表数组
     void addMusic(const QList<QUrl>& urls);
     //添加一首歌曲
     void addMusic(const Music& iMusic);
