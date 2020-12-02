@@ -79,21 +79,26 @@ void MusicList::addToListWidget(MusicListWidget *listWidget)
 void MusicList::removeMusic(int pos)
 {
     if(sql_flag){
+        //移除数据库记录
         remove_SQL_all();
         int i=0;
         for(auto it=music.begin();it!=music.end();){
             if(i==pos){
+                //找到对应下标的音乐数据，用erase(it)方法删掉，删完erase(it)方法返回it下一个元素的下标，it指向下一个元素
                 it= music.erase(it);
                 break;
             }
             else{
+                //不是目标元素
                 it++;
             }
             i++;
             
         }
+        //把更改完成后的歌单信息插入到数据库
         insert_SQL_all();    
     }else{
+        //sql_flag=0，不用进行数据库操作
         int i=0;
         for(auto it=music.begin();it!=music.end();){
             if(i==pos){
@@ -112,26 +117,26 @@ void MusicList::removeMusic(int pos)
 
 void MusicList::showInExplorer(int pos)
 {
-    QString str=music[pos].getUrl().toString();
+    QString str=music[pos].getUrl().toString();//获取歌曲地址，把类型转成字符串
     str.remove(str.split("/").last());//切割字符串获得所在的文件夹路径
     QDesktopServices::openUrl(str);//调用QDesktopServices类函数打开文件夹
 }
 
 void MusicList::detail(int pos)
 {
-    music[pos].detail();
+    music[pos].detail();//调用Music类函数，显示指定歌曲详细信息
 }
 
 void MusicList::remove_SQL_all()
 {
     QSqlQuery sql_query;
-    QString delete_sql = "delete from MusicInfo where name = ?";//用SQL查询语句，在数据库中删除对应
+    QString delete_sql = "delete from MusicInfo where name = ?";//用SQL查询语句，在数据库中删除对应歌单中全部歌曲
     sql_query.prepare(delete_sql);
     sql_query.addBindValue(name);
     sql_query.exec();
 }
 
-//便于排序
+//将歌单中的歌曲全部写入数据库
 void MusicList::insert_SQL_all()
 {
     for(auto i=music.begin();i!=music.end();i++){
