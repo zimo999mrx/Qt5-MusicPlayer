@@ -16,6 +16,7 @@ class Widget;
 
 class MainWidget : public QWidget
 {
+    //自定义类时， 使用Qt框架提供的信号槽机制，要添加这行
     Q_OBJECT
     
 public:
